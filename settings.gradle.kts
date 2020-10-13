@@ -1,12 +1,12 @@
 pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        jcenter()
-    }
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+    jcenter()
+  }
 }
 
-rootProject.name = ("kotlin-gradle-plugin-template")
+rootProject.name = ("maven-s3-plugin")
 
 include(":example")
 includeBuild("plugin-build")
