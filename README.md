@@ -1,29 +1,59 @@
-# maven-s3-plugin 🐘
+# maven-s3-plugin
 
-A simple Gradle plugin that exposes a 'mavenS3' repository type. This is just a normal 'maven' repository which
-delegates it's credential acquisition to the AWS SDK, and allows the optional specification of a profile.
+A simple Gradle plugin that exposes a 'mavenS3' repository type. This is just a normal 'maven' repository that
+delegates credential acquisition to the AWS SDK. It also allows the optional specification of a profile.
+
+## Features
+
+Supports:
+* Default AWS provider chain credential lookup
+* Role switching (via AWS profiles)
+* Optional specification of AWS profile names
+* Compatible with Gradle 6.6
   
-## How to use 👣
+## How to use
 
-TODO
+#### Import the plugin
 
-## Features 🎨
+In Kotlin `build.gradle.kts`
 
-TODO
+```kotlin
+plugins {
+  id("com.github.brodziakm.maven-s3") version "0.0.1"
+}
+```
 
-## CI ⚙️
+In Groovy `build.gradle`
 
-This project is using [**GitHub Actions**](https://github.com/brodziakm/maven-s3-plugin/actions).
+```groovy
+plugins {
+  id "com.github.brodziakm.maven-s3" version "0.0.1"
+}
+```
 
-There are currently the following workflows available:
-- [Validate Gradle Wrapper](.github/workflows/gradle-wrapper-validation.yml) - Will check that the gradle wrapper has a valid checksum
-- [Pre Merge Checks](.github/workflows/pre-merge.yaml) - Will run the `preMerge` tasks as well as trying to run the Gradle plugin.
-- [Publish to Plugin Portal](.github/workflows/pre-merge.yaml) - Will run the `publishPlugin` task when pushing a new tag.
+#### Declare your repositories
+
+In Kotlin `build.gradle.kts`
+
+```kotlin
+repositories {
+  mavenCentral() // or any as required per normal DSL 
+  mavenS3.at("<your S3 url here>")
+  mavenS3.at("<your S3 url here>", "<your profile name here>") // optionally specify a profile name
+}
+```
+
+#### Specify your AWS credentials
+
+As per [Supplying and Retrieving AWS Credentials](https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html)
+
+
 
 ## Acknowledgements
 
-This is based on the Kotlin Gradle plugin template kindly provided by https://github.com/cortinico/kotlin-gradle-plugin-template/generate
+This is inspired by the [awsm-credentials-gradle](https://github.com/itsallcode/awsm-credentials-gradle) plugin. This
+plugin sadly no longer works on Gradle 6.6+ due to changes in the repository credentials API. 
 
-## Contributing 🤝
+## Contributing
 
 Feel free to open a issue or submit a pull request for any bugs/improvements.
