@@ -19,7 +19,7 @@ In Kotlin `build.gradle.kts`
 
 ```kotlin
 plugins {
-  id("com.github.brodziakm.maven-s3") version "0.0.1"
+  id("com.github.brodziakm.maven-s3") version "1.2.0"
 }
 ```
 
@@ -27,7 +27,7 @@ In Groovy `build.gradle`
 
 ```groovy
 plugins {
-  id "com.github.brodziakm.maven-s3" version "0.0.1"
+  id "com.github.brodziakm.maven-s3" version "1.2.0"
 }
 ```
 
@@ -37,9 +37,21 @@ In Kotlin `build.gradle.kts`
 
 ```kotlin
 repositories {
-  mavenCentral() // or any as required per normal DSL 
-  mavenS3.at("<your S3 url here>")
-  mavenS3.at("<your S3 url here>", "<your profile name here>") // optionally specify a profile name
+  mavenCentral() // or any as required per normal DSL
+  maven {
+    url = uri("<your S3 url here>")
+      credentials(AwsCredentials::class) {
+        mavenS3.resolve(this)
+      }
+    }
+  }
+  maven {
+    url = uri("<your S3 url here>")
+      credentials(AwsCredentials::class) {
+        mavenS3.resolve(this, "<your profile name here>") // optionally specify a profile name
+      }
+    }
+  }
 }
 ```
 

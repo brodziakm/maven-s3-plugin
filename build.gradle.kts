@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.brodziakm"
-version = "1.1.1"
+version = "1.2.0"
 
 repositories {
   mavenLocal()
@@ -41,11 +41,11 @@ pluginBundle {
   website = "https://github.com/brodziakm/maven-s3-plugin"
   vcsUrl = "https://github.com/brodziakm/maven-s3-plugin"
   tags = listOf("aws", "awssdk", "credentials", "profile", "maven", "s3")
-  description = "Supports the declaration of Maven S3 repositories that obtain their credentials from the default AWS provider chain"
+  description = "Supports the binding of AWS credentials (obtained via the AWS SDK default provider chain) to Maven S3 repositories"
 
   (plugins) {
     "maven-s3-plugin" {
-      displayName = "Plugin for declaring Maven S3 repositories with implicit AWS credentials"
+      displayName = "Plugin for binding AWS credentials to Maven S3 repositories"
     }
   }
 }
