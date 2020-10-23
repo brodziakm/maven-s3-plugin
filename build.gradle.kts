@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.brodziakm"
-version = "1.0.0"
+version = "1.1.1"
 
 repositories {
   mavenLocal()
@@ -15,12 +15,17 @@ repositories {
 }
 
 dependencies {
-  implementation("software.amazon.awssdk:auth:2.15.7")
-  implementation("software.amazon.awssdk:sts:2.15.7")
+  implementation("software.amazon.awssdk:auth:2.15.13")
+  implementation("software.amazon.awssdk:sts:2.15.13")
 }
 
 kotlinDslPluginOptions {
   experimentalWarning.set(false)
+}
+
+configure<JavaPluginConvention> {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 gradlePlugin {

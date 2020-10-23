@@ -43,6 +43,7 @@ open class MavenS3Extension(private val project: Project) {
     private val provider = credentialsProvider(profile)
 
     override fun execute(repository: MavenArtifactRepository) {
+      repository.name = "MavenS3"
       repository.url = URI(url)
       repository.credentials(AwsCredentials::class.java, AwsCredentialsAction(provider))
     }
