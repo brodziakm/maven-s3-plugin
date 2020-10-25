@@ -16,19 +16,19 @@ import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
 open class MavenS3Extension(private val project: Project) {
 
   /**
-   * Resolve AWS credentials into the provided AwsCredentials instance using the default provider chain
+   * Generate an action that applies AWS credentials from the default provider chain to the Gradle AwsCredentials
+   * context.
    */
-  fun resolve(credentials: AwsCredentials) {
-    resolve(credentials, null)
+  fun credentials() : Action<AwsCredentials> {
+    return credentials(null)
   }
 
   /**
-   * Resolve AWS credentials into the provided AwsCredentials instance using the default provider chain, and explicitly
-   * specifying the provided role.
+   * Generate an action that applies AWS credentials from the default provider chain, using the specified role, to the
+   * Gradle AwsCredentials context.
    */
-  fun resolve(credentials: AwsCredentials, profile: String?) {
-    val action = AwsCredentialsAction(credentialsProvider(profile))
-    action.execute(credentials)
+  fun credentials(profile: String?) : Action<AwsCredentials> {
+    return AwsCredentialsAction(credentialsProvider(profile))
   }
 
   /**

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.brodziakm"
-version = "1.2.0"
+version = "1.3.0"
 
 repositories {
   mavenLocal()
@@ -15,8 +15,8 @@ repositories {
 }
 
 dependencies {
-  implementation("software.amazon.awssdk:auth:2.15.13")
-  implementation("software.amazon.awssdk:sts:2.15.13")
+  implementation("software.amazon.awssdk:auth:2.15.14")
+  implementation("software.amazon.awssdk:sts:2.15.14")
 }
 
 kotlinDslPluginOptions {
