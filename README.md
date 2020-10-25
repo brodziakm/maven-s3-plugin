@@ -19,7 +19,7 @@ In Kotlin `build.gradle.kts`
 
 ```kotlin
 plugins {
-  id("com.github.brodziakm.maven-s3") version "1.2.0"
+  id("com.github.brodziakm.maven-s3") version "1.3.0"
 }
 ```
 
@@ -27,7 +27,7 @@ In Groovy `build.gradle`
 
 ```groovy
 plugins {
-  id "com.github.brodziakm.maven-s3" version "1.2.0"
+  id "com.github.brodziakm.maven-s3" version "1.3.0"
 }
 ```
 
@@ -38,19 +38,33 @@ In Kotlin `build.gradle.kts`
 ```kotlin
 repositories {
   mavenCentral() // or any as required per normal DSL
+  // option without specific profile:
   maven {
     url = uri("<your S3 url here>")
-      credentials(AwsCredentials::class) {
-        mavenS3.resolve(this)
-      }
-    }
+    credentials(AwsCredentials::class, mavenS3.credentials())
   }
+  // option with specific profile:
   maven {
     url = uri("<your S3 url here>")
-      credentials(AwsCredentials::class) {
-        mavenS3.resolve(this, "<your profile name here>") // optionally specify a profile name
-      }
-    }
+    credentials(AwsCredentials::class, mavenS3.credentials("<your profile name here>"))
+  }
+}
+```
+
+In Groovy `build.gradle`
+
+```groovy
+repositories {
+  // ... other repository definitions as required
+  // option without specific profile:
+  maven {
+    url '<your repository url here>'
+    credentials(AwsCredentials, mavenS3.credentials())
+  }
+  // option with specific profile:
+  maven {
+    url '<your repository url here>'
+    credentials(AwsCredentials, mavenS3.credentials('<your profile name here>'))
   }
 }
 ```
@@ -58,7 +72,6 @@ repositories {
 #### Specify your AWS credentials
 
 As per [Supplying and Retrieving AWS Credentials](https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html)
-
 
 
 ## Acknowledgements
