@@ -1,7 +1,9 @@
 # maven-s3-plugin
 
-A simple Gradle plugin that exposes a 'mavenS3' repository type. This is just a normal 'maven' repository that
-delegates credential acquisition to the AWS SDK. It also allows the optional specification of a profile.
+A simple Gradle plugin that provides a configurable action for binding Gradle AWS credentials using the default 
+AWS credential provider chain. It also allows the optional specification of a profile. 
+
+Unlike Gradle's in-built AwsImAuthentication, this can be leveraged in scenarios that require role switching. 
 
 ## Features
 
