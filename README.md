@@ -3,13 +3,14 @@
 A simple Gradle plugin that provides a configurable action for binding Gradle AWS credentials using the default 
 AWS credential provider chain. It also allows the optional specification of a profile. 
 
-Unlike Gradle's in-built AwsImAuthentication, this can be leveraged in scenarios that require role switching. 
+Unlike Gradle's in-built AwsImAuthentication, this can be leveraged in scenarios that require role switching, OIDC SSO,
+or other more advanced scenarios that are natively supported by the AWS SDK.
 
 ## Features
 
 Supports:
-* Default AWS provider chain credential lookup
-* Role switching (via AWS profiles)
+* The AWS Java SDK 2.x default provider chain credential lookup, along with all capabilities that it provides
+* Single Sign On via OIDC, if configured (see https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html)
 * Optional specification of AWS profile names
 * Compatible with Gradle 6.6
   
