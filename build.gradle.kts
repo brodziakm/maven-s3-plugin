@@ -2,11 +2,11 @@ plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
   `maven-publish`
-  id("com.gradle.plugin-publish") version "1.1.0"
+  id("com.gradle.plugin-publish") version "1.3.1"
 }
 
 group = "com.github.brodziakm"
-version = "1.4.0"
+version = "1.5.0"
 
 repositories {
   mavenLocal()
@@ -14,23 +14,23 @@ repositories {
 }
 
 extra.apply {
-  set("awssdk.version", "2.20.99")
+  set("awssdk.version", "2.31.62")
 }
 
 dependencies {
   implementation("software.amazon.awssdk:auth:${property("awssdk.version")}")
   implementation("software.amazon.awssdk:sts:${property("awssdk.version")}")
-  runtimeOnly("software.amazon.awssdk:sso:${property("awssdk.version")}")
+  implementation("software.amazon.awssdk:sso:${property("awssdk.version")}")
   runtimeOnly("software.amazon.awssdk:ssooidc:${property("awssdk.version")}")
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(21))
+  }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
+  sourceCompatibility = JavaVersion.toVersion("21")
+  targetCompatibility = JavaVersion.toVersion("21")
 }
 
 gradlePlugin {
