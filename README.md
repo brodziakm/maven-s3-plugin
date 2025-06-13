@@ -27,7 +27,7 @@ AWS SDK via [DefaultCredentialsProvider](https://sdk.amazonaws.com/java/api/late
 and then pass these back via [AwsCredentials](https://docs.gradle.org/current/javadoc/org/gradle/api/credentials/AwsCredentials.html).
 
 This plugin supports all capabilities that are provided from the AWS SDK default credentials provider chain as of the
-**AWS SDK version 2.20.99**.
+**AWS SDK version 2.31.62**.
 
 ## How to use
 
@@ -92,6 +92,8 @@ repositories {
 As per [Supplying and Retrieving AWS Credentials](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials-chain.html)
 
 For single sign on, see [Token provider configuration with automatic authentication refresh for AWS IAM Identity Center](https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html)
+
+If the AWS CLI is installed, the plugin will try to automatically login and use the profile specified in the environment variable **MAVEN_S3_AWS_PROFILE**, otherwise it will use the standard credentials provider chain. 
 
 ## Acknowledgements
 

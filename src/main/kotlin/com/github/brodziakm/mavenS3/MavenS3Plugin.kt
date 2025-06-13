@@ -4,8 +4,10 @@ import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.credentials.AwsCredentials
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider
+import com.github.brodziakm.aws.AwsProfileCredentialsProvider
 
 
 /**
@@ -20,7 +22,7 @@ open class MavenS3Extension(private val project: Project) {
    * context.
    */
   fun credentials() : Action<AwsCredentials> {
-    return credentials(null)
+    return credentials(System.getenv("MAVEN_S3_AWS_PROFILE"))
   }
 
   /**
@@ -34,18 +36,18 @@ open class MavenS3Extension(private val project: Project) {
   /**
    * Get a default credentials provider, configured to use the provided profile if specified
    */
-  private fun credentialsProvider(profile: String?): DefaultCredentialsProvider {
+  private fun credentialsProvider(profile: String?): AwsCredentialsProvider {
     if (profile != null) {
       project.logger.info("Using AWS profile '${profile}'")
-      return DefaultCredentialsProvider.builder().profileName(profile).build()
+      return AwsProfileCredentialsProvider(profile)
     }
-    return DefaultCredentialsProvider.create()
+    return DefaultCredentialsProvider.builder().build()
   }
 
   /**
    * A simple action that applies credentials obtained via the default AWS provider chain to the Gradle AWS credentials
    */
-  inner class AwsCredentialsAction(private val provider: DefaultCredentialsProvider) : Action<AwsCredentials> {
+  inner class AwsCredentialsAction(private val provider: AwsCredentialsProvider) : Action<AwsCredentials> {
     override fun execute(credentials: AwsCredentials) {
       val awsCredentials = provider.resolveCredentials()
       credentials.accessKey = awsCredentials.accessKeyId()
