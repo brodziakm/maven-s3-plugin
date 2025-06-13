@@ -9,15 +9,13 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
-import software.amazon.awssdk.core.exception.SdkClientException;
-import software.amazon.awssdk.services.sso.model.UnauthorizedException;
+import software.amazon.awssdk.core.exception.SdkException;
 
 /**
  * {@link AwsCredentialsProvider} for assuming a specified role automatically renewing the temporary credentials as needed.
@@ -57,20 +55,8 @@ public class AwsProfileCredentialsProvider implements AwsCredentialsProvider {
         .isEmpty()) {
         doResolveCredentials();
       }
-    } catch (SdkClientException e) {
-      if (Objects.equals("Token is expired", e.getMessage()) && trySsoLogin()) {
-        rebuildProvider();
-        doResolveCredentials();
-      } else {
-        throw e;
-      }
-    } catch (UnauthorizedException e) {
-      if (trySsoLogin()) {
-        rebuildProvider();
-        doResolveCredentials();
-      } else {
-        throw e;
-      }
+    } catch (SdkException e) {
+      tryLoginAndResolve(e);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     } finally {
@@ -88,6 +74,15 @@ public class AwsProfileCredentialsProvider implements AwsCredentialsProvider {
 
   private void doResolveCredentials() {
     credentials = credentialsProvider.resolveCredentials();
+  }
+  
+  private void tryLoginAndResolve(SdkException e) {
+    if (trySsoLogin()) {
+      rebuildProvider();
+      doResolveCredentials();
+    } else {
+      throw e;
+    }
   }
 
   private boolean trySsoLogin() {
