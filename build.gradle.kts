@@ -25,12 +25,8 @@ dependencies {
 }
 
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(21))
-  }
-
-  sourceCompatibility = JavaVersion.toVersion("21")
-  targetCompatibility = JavaVersion.toVersion("21")
+  sourceCompatibility = JavaVersion.toVersion("1.8")
+  targetCompatibility = JavaVersion.toVersion("1.8")
 }
 
 gradlePlugin {

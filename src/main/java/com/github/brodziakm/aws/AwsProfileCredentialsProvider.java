@@ -8,8 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Stream;
@@ -93,7 +93,7 @@ public class AwsProfileCredentialsProvider implements AwsCredentialsProvider {
   private boolean trySsoLogin() {
     if (SSO_LOGIN != null) {
       try {
-        var command = new LinkedList<>(asList(SSO_LOGIN));
+        List<String> command = new LinkedList<>(asList(SSO_LOGIN));
         command.add(profile);
         new ProcessBuilder()
           .command(command)
@@ -110,22 +110,19 @@ public class AwsProfileCredentialsProvider implements AwsCredentialsProvider {
 
   private static String[] buildBaseAwsLoginCommand() {
     try {
-      var pathSeparator = System.getProperty("path.separator");
+      String pathSeparator = System.getProperty("path.separator");
       return Stream.of(System.getenv("PATH").split(pathSeparator, -1))
         .map(Path::of)
-        .map(p -> {
-          try (var files = Files.list(p)) {
-            return files
-              .filter(file -> file.getFileName().toString().toLowerCase().startsWith("aws"))
-              .findFirst();
+        .flatMap(p -> {
+          try {
+            return Files.list(p);
           } catch (IOException e) {
-            return Optional.empty();
+            return Stream.empty();
           }
         })
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(aws -> new String[] { aws.toString(), "sso", "login", "--profile" })
+        .filter(file -> file.getFileName().toString().toLowerCase().startsWith("aws"))
         .findFirst()
+        .map(aws -> new String[] { aws.toString(), "sso", "login", "--profile" })
         .orElse(null);
     } catch (Throwable th) {
       return null;
